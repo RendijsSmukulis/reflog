@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reflog", "Reflog\Reflog.csproj", "{38E04C46-E1EA-45C9-9A21-6C447FFFFA00}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{38E04C46-E1EA-45C9-9A21-6C447FFFFA00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38E04C46-E1EA-45C9-9A21-6C447FFFFA00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38E04C46-E1EA-45C9-9A21-6C447FFFFA00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38E04C46-E1EA-45C9-9A21-6C447FFFFA00}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8A606B38-0C00-418B-8D9E-C9437D06321D}
+	EndGlobalSection
+EndGlobal
