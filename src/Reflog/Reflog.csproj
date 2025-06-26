@@ -7,8 +7,30 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <Target Name="CopyToTools" AfterTargets="Build">
+    <PropertyGroup>
+      <ToolsDirectory>c:\dev\tools</ToolsDirectory>
+    </PropertyGroup>
+    
+    <MakeDir Directories="$(ToolsDirectory)" Condition="!Exists('$(ToolsDirectory)')" />
+    
+    <ItemGroup>
+      <BuildOutputs Include="$(OutputPath)*.*" />
+    </ItemGroup>
+    
+    <Copy SourceFiles="@(BuildOutputs)" DestinationFolder="$(ToolsDirectory)" />
+    
+    <Message Text="Build output copied to $(ToolsDirectory)" Importance="high" />
+  </Target>
+
   <ItemGroup>
-    <PackageReference Include="Spectre.Console" Version="0.48.0" />
+    <PackageReference Include="TextCopy" Version="6.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Spectre.Console">
+      <HintPath>..\..\..\spectre.console\src\Spectre.Console\bin\Debug\net8.0\Spectre.Console.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

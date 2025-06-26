@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Spectre.Console;
+using TextCopy;
 
 namespace Reflog
 {
@@ -21,14 +22,41 @@ namespace Reflog
             
             var movedBranches = GetMovesToCommitOrBranch(rawLines).Take(size);
 
+            var copyBranch = string.Empty;
+            var diffBranch = string.Empty;
+            var quitBranch = string.Empty;
+
             var chosenBranch = AnsiConsole.Prompt(
                 new SelectionPrompt<string>().Title("Pick branch:")
                     .PageSize(10)
-                    .AddChoices(movedBranches));
-            
-            Console.WriteLine($"git checkout {chosenBranch}");
-            var gitResponse = InvokeGit($"checkout {chosenBranch}");
-            Debug.WriteLine($"> {gitResponse}");
+                    .AddChoices(movedBranches)
+                    .Footer("[grey](Press [blue]<c>[/] to copy, [blue]<d>[/] to difftool, [blue]<q>[/] to exit, [green]<enter>[/] to switch to branch)[/]")
+                    .WithCustomAction(ConsoleKey.C, s => copyBranch = s)
+                    .WithCustomAction(ConsoleKey.Q, s => quitBranch = s)
+                    .WithCustomAction(ConsoleKey.D, s => diffBranch = s)
+                );
+
+
+            if (!string.IsNullOrEmpty(quitBranch))
+            {
+                Environment.Exit(0);
+            }
+            else if (!string.IsNullOrEmpty(copyBranch))
+            {
+                ClipboardService.SetText(copyBranch);
+                AnsiConsole.Write(new Markup($"[grey]copied [blue]{copyBranch}[/] to clipboard[/]"));
+            }
+            else if (!string.IsNullOrEmpty(diffBranch))
+            {
+                AnsiConsole.Write(new Markup($"[grey]diffing with [blue]{diffBranch}[/][/]"));
+                var gitResponse = InvokeGit($"difftool {diffBranch} --dir-diff");
+            }
+            else
+            {
+                Console.WriteLine($"git checkout {chosenBranch}");
+                var gitResponse = InvokeGit($"checkout {chosenBranch}");
+                Debug.WriteLine($"> {gitResponse}");
+            }
         }
 
         private static string[] GetMovesToCommitOrBranch(List<string> rawLines)
