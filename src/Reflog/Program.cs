@@ -9,7 +9,7 @@ namespace Reflog
     {
         static void Main(string[] args)
         {
-            Directory.SetCurrentDirectory("C:\\dev\\git\\windows-browser");
+            // Directory.SetCurrentDirectory("C:\\dev\\git\\windows-browser");
 
             var size = 10;
 
@@ -21,6 +21,12 @@ namespace Reflog
             var rawLines = GetGitReflogLines().ToList();
             
             var movedBranches = GetMovesToCommitOrBranch(rawLines).Take(size);
+
+            if (!movedBranches.Any())
+            {
+                AnsiConsole.MarkupLine("[red]No branches found, quitting.[/]");
+                return;
+            }
 
             var copyBranch = string.Empty;
             var diffBranch = string.Empty;
