@@ -6,11 +6,12 @@ Helper utility to see recently checked out branches, switch to them, diff agains
 
 ### From GitHub Releases
 1. Go to the [Releases](https://github.com/RendijsSmukulis/reflog/releases) page
-2. Download the appropriate version for your platform:
-   - `reflog-windows-x64.zip` for Windows
-   - `reflog-linux-x64.tar.gz` for Linux
-   - `reflog-macos-x64.tar.gz` for macOS
-3. Extract the files and run the executable
+2. Download the appropriate executable for your platform:
+   - `reflog-windows-x64.exe` for Windows
+   - `reflog-linux-x64` for Linux
+   - `reflog-macos-x64` for macOS
+3. Make the file executable (Linux/macOS): `chmod +x reflog-linux-x64`
+4. Run the executable directly
 
 ### From Source
 ```bash

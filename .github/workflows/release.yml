@@ -45,7 +45,7 @@ jobs:
       run: dotnet build src/Reflog/Reflog.csproj --configuration Release --no-restore
 
     - name: Publish
-      run: dotnet publish src/Reflog/Reflog.csproj --configuration Release --no-restore --runtime ${{ matrix.runtime }} --self-contained true --output ./publish
+      run: dotnet publish src/Reflog/Reflog.csproj --configuration Release --no-restore --runtime ${{ matrix.runtime }} --self-contained true --output ./publish --property:PublishSingleFile=true
 
     - name: Create artifact directory
       run: mkdir -p artifacts
@@ -54,14 +54,14 @@ jobs:
       if: matrix.os == 'windows-latest'
       run: |
         cd publish
-        7z a -tzip ../artifacts/${{ matrix.artifact-name }}.zip *
+        copy reflog.exe ../artifacts/${{ matrix.artifact-name }}.exe
       shell: pwsh
 
     - name: Package Linux/macOS executable
       if: matrix.os != 'windows-latest'
       run: |
         cd publish
-        tar -czf ../artifacts/${{ matrix.artifact-name }}.tar.gz *
+        cp reflog ../artifacts/${{ matrix.artifact-name }}
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
@@ -87,9 +87,9 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         files: |
-          artifacts/reflog-windows-x64/*.zip
-          artifacts/reflog-linux-x64/*.tar.gz
-          artifacts/reflog-macos-x64/*.tar.gz
+          artifacts/reflog-windows-x64/*.exe
+          artifacts/reflog-linux-x64/reflog-linux-x64
+          artifacts/reflog-macos-x64/reflog-macos-x64
         generate_release_notes: true
         draft: false
         prerelease: false
