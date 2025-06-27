@@ -49,7 +49,7 @@ This will trigger the release workflow and create a new GitHub release with arti
 ## Development
 
 ### Prerequisites
-- .NET 8.0 SDK
+- .NET 9.0 SDK
 - Git
 
 ### Building Locally
