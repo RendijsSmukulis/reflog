@@ -1,11 +1,11 @@
 # Reflog
 
-Helper utility to see recently checked out branches, switch to them, or copy the names to clipboard.
+Helper utility to see recently checked out branches, switch to them, diff against current branch, or copy the names to clipboard.
 
 ## Installation
 
 ### From GitHub Releases
-1. Go to the [Releases](https://github.com/yourusername/reflog/releases) page
+1. Go to the [Releases](https://github.com/RendijsSmukulis/reflog/releases) page
 2. Download the appropriate version for your platform:
    - `reflog-windows-x64.zip` for Windows
    - `reflog-linux-x64.tar.gz` for Linux
@@ -14,7 +14,7 @@ Helper utility to see recently checked out branches, switch to them, or copy the
 
 ### From Source
 ```bash
-git clone https://github.com/yourusername/reflog.git
+git clone https://github.com/RendijsSmukulis/reflog --recurse-submodules
 cd reflog
 dotnet build src/Reflog/Reflog.csproj --configuration Release
 ```
