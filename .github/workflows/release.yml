@@ -88,8 +88,8 @@ jobs:
       with:
         files: |
           artifacts/reflog-windows-x64/*.exe
-          artifacts/reflog-linux-x64/reflog-linux-x64
-          artifacts/reflog-macos-x64/reflog-macos-x64
+          artifacts/reflog-linux-x64
+          artifacts/reflog-macos-x64
         generate_release_notes: true
         draft: false
         prerelease: false
