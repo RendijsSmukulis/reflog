@@ -1,0 +1,33 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore src/Reflog/Reflog.csproj
+
+    - name: Build
+      run: dotnet build src/Reflog/Reflog.csproj --configuration Release --no-restore
+
+    - name: Test
+      run: dotnet test src/Reflog/Reflog.csproj --no-build --verbosity normal 

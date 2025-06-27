@@ -1,0 +1,92 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+        include:
+          - os: windows-latest
+            runtime: win-x64
+            artifact-name: reflog-windows-x64
+          - os: ubuntu-latest
+            runtime: linux-x64
+            artifact-name: reflog-linux-x64
+          - os: macos-latest
+            runtime: osx-x64
+            artifact-name: reflog-macos-x64
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore src/Reflog/Reflog.csproj
+
+    - name: Build
+      run: dotnet build src/Reflog/Reflog.csproj --configuration Release --no-restore
+
+    - name: Publish
+      run: dotnet publish src/Reflog/Reflog.csproj --configuration Release --no-restore --runtime ${{ matrix.runtime }} --self-contained true --output ./publish
+
+    - name: Create artifact directory
+      run: mkdir -p artifacts
+
+    - name: Package Windows executable
+      if: matrix.os == 'windows-latest'
+      run: |
+        cd publish
+        7z a -tzip ../artifacts/${{ matrix.artifact-name }}.zip *
+      shell: pwsh
+
+    - name: Package Linux/macOS executable
+      if: matrix.os != 'windows-latest'
+      run: |
+        cd publish
+        tar -czf ../artifacts/${{ matrix.artifact-name }}.tar.gz *
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.artifact-name }}
+        path: artifacts/${{ matrix.artifact-name }}.*
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: artifacts
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: |
+          artifacts/reflog-windows-x64/*.zip
+          artifacts/reflog-linux-x64/*.tar.gz
+          artifacts/reflog-macos-x64/*.tar.gz
+        generate_release_notes: true
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
