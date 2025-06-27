@@ -1,0 +1,3 @@
+[submodule "submodules/spectre.console"]
+	path = submodules/spectre.console
+	url = https://github.com/RendijsSmukulis/spectre.console

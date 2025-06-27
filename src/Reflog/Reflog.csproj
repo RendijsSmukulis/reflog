@@ -28,9 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Spectre.Console">
-      <HintPath>..\..\..\spectre.console\src\Spectre.Console\bin\Debug\net8.0\Spectre.Console.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\..\submodules\spectre.console\src\Spectre.Console\Spectre.Console.csproj" />
   </ItemGroup>
 
 </Project>

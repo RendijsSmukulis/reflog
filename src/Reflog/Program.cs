@@ -56,6 +56,7 @@ namespace Reflog
             {
                 AnsiConsole.Write(new Markup($"[grey]diffing with [blue]{diffBranch}[/][/]"));
                 var gitResponse = InvokeGit($"difftool {diffBranch} --dir-diff");
+                Debug.WriteLine($"> {gitResponse}");
             }
             else
             {
@@ -69,21 +70,11 @@ namespace Reflog
         {
             var moves = rawLines.Select(line =>
                 {
-                    string pattern = @"\b(\w+)\s+HEAD@\{\d+\}:\s+(\w+):\s+moving\s+from\s+(\S+)\s+to\s+(\S+)";
-                    Regex regex = new Regex(pattern);
+                    var pattern = @"\b(\w+)\s+HEAD@\{\d+\}:\s+(\w+):\s+moving\s+from\s+(\S+)\s+to\s+(\S+)";
+                    var regex = new Regex(pattern);
 
-                    Match match = regex.Match(line);
-                    if (match.Success)
-                    {
-                        string action = match.Groups[2].Value;
-                        string destinationBranch = match.Groups[4].Value;
-
-                        return destinationBranch;
-                    }
-                    else
-                    {
-                        return null;
-                    }
+                    var match = regex.Match(line);
+                    return match.Success ? match.Groups[4].Value : null;
                 })
                 .Where(l => l != null);
 
@@ -110,7 +101,7 @@ namespace Reflog
 
         private static string InvokeGit(string arguments)
         {
-            ProcessStartInfo startInfo = new ProcessStartInfo();
+            var startInfo = new ProcessStartInfo();
             startInfo.FileName = "git"; // Assuming git is in the system path
             startInfo.Arguments = arguments;
             startInfo.RedirectStandardOutput = true;
